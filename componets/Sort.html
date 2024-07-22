@@ -1,0 +1,31 @@
+<div x-data="sortComponent()" class="flex sm:w-[95%] max-w-[21rem] md:w-full">
+  <label for="sort" class="w-20 my-auto font-semibold">Sort by:</label>
+  <select @change="handleSort" x-model="sorting" id="sort" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+    <option value="default">Default</option>
+    <option value="low">Price: Low to High</option>
+    <option value="high">Price: High to Low</option>
+  </select>
+</div>
+
+<script>
+  function sortComponent() {
+    return {
+      sorting: 'default',
+      handleSort(event) {
+        this.sorting = event.target.value;
+        this.sortProducts();
+      },
+      sortProducts() {
+        // Fetch products and sort them based on this.sorting value
+        fetch(`/api/products?sort=${this.sorting}`)
+          .then(response => response.json())
+          .then(data => {
+            // Assuming you have a way to update the product list in your state/store
+            // For example, you might trigger an Alpine.js event or call another function
+            // Here you would update the product list
+            console.log(data);
+          });
+      },
+    }
+  }
+</script>

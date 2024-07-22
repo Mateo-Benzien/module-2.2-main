@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f4f8;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #333;
+  color: #fff;
+}
+
+.navbar-left h1 {
+  margin: 0;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.search-input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  flex: 1; /* Allows the input to grow and fill available space */
+}
+
+.search-button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.search-button:hover {
+  background-color: #555;
+  border-color: #555;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.controls-inner {
+  display: flex;
+  gap: 1rem;
+}
+
+.dropdown-container,
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-label,
+.sort-label {
+  font-weight: bold;
+}
+
+.dropdown-select,
+.sort-select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+}
+
+.product-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.product-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: calc(20% - 1.2rem); /* Adjusted for smaller cards */
+  box-sizing: border-box;
+}
+
+.product-img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 0.5rem;
+}
+
+.product-title {
+  font-size: 1rem; /* Reduced font size */
+  margin: 0;
+}
+
+.product-desc {
+  font-size: 0.875rem; /* Reduced font size */
+  color: #666;
+}
+
+.product-price {
+  font-size: 1rem; /* Reduced font size */
+  font-weight: bold;
+}

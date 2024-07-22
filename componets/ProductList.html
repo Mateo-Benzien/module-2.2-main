@@ -1,0 +1,102 @@
+<div
+  x-data="productList()"
+  class="grid justify-center"
+  x-init="init()"
+>
+  <!-- Loading State -->
+  <template x-if="loading && !error">
+    <div class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
+      <template x-for="index in 20" :key="index">
+        <div class="flex flex-col bg-gray-200 animate-pulse rounded-lg p-4">
+          <div class="h-48 bg-gray-300 rounded mb-4"></div>
+          <div class="h-6 bg-gray-300 rounded mb-2"></div>
+          <div class="h-6 bg-gray-300 rounded mb-2"></div>
+          <div class="h-6 bg-gray-300 rounded mb-2"></div>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <!-- Error State -->
+  <template x-if="error">
+    <div class="grid justify-center">
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error:</strong>
+        <span class="block sm:inline" x-text="error.message"></span>
+      </div>
+    </div>
+  </template>
+
+  <!-- Product List -->
+  <template x-if="!loading && !error">
+    <div class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
+      <template x-for="product in products" :key="product.id">
+        <div
+          @click="navigateToProduct(product.id)"
+          class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-300 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
+        >
+          <img :src="product.image" alt="Product Image" class="object-contain h-48 mt-3">
+          <div class="flex-1 flex flex-col p-6">
+            <div class="flex-1">
+              <header class="mb-2 flex-2">
+                <h2 class="text-lg line-clamp-2 font-extrabold leading-snug text-slate-600">
+                  <div x-text="product.title"></div>
+                </h2>
+              </header>
+              <div class="flex gap-1">
+                <svg class="w-4 h-4 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+                <span x-text="product.rating.rate"></span>
+              </div>
+              <div class="text-base line-clamp-2 font-extrabold text-slate-500 leading-snug">
+                <h2 x-text="'$' + product.price"></h2>
+              </div>
+            </div>
+            <div class="flex mt-1 space-x-2">
+              <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="product.category"></span>
+              <button @click.stop="addToFavourites(product.id)">
+                <svg class="me-1.5 h-5 w-5 hover:fill-red-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" transform="scale(1.6)">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
+                </svg>
+              </button>
+              <button @click.stop="addToCart(product.id)" class="inline-flex justify-center whitespace-nowrap rounded-lg bg-cyan-700 px-3 py-2 text-sm font-medium text-white hover:bg-cyan-900 transition-colors">Add To Cart</button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+</div>
+
+<script>
+  function productList() {
+    return {
+      products: [],
+      loading: true,
+      error: null,
+      init() {
+        // Fetch products here and set loading to false when done
+        fetch('/api/products')
+          .then(response => response.json())
+          .then(data => {
+            this.products = data;
+            this.loading = false;
+          })
+          .catch(err => {
+            this.error = err;
+            this.loading = false;
+          });
+      },
+      navigateToProduct(id) {
+        window.location.href = `/products/${id}`;
+      },
+      addToFavourites(id) {
+        alert(`Product ${id} added to favourites`);
+      },
+      addToCart(id) {
+        alert(`Product ${id} added to cart`);
+      }
+    }
+  }
+</script>
