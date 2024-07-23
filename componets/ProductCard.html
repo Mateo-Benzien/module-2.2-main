@@ -1,10 +1,10 @@
+<!-- Product Card -->
 <div
   x-data="productCard({ id: 1, title: 'Sample Product', image: 'path/to/image.jpg', price: 99.99, rating: 4.5, category: 'Electronics' })"
-  @click="handleClick"
+  @click="openModal"
   class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-300 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
 >
   <img class="object-contain h-48 mt-3" :src="product.image" alt="Product Image">
-
   <div class="flex-1 flex flex-col p-6">
     <div class="flex-1">
       <header class="mb-2 flex-2">
@@ -21,7 +21,6 @@
         <h2 x-text="'$' + product.price"></h2>
       </div>
     </div>
-
     <div class="flex mt-1 space-x-2">
       <div class="justify-start flex-1">
         <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="product.category"></span>
@@ -47,7 +46,6 @@
             />
           </svg>
         </button>
-
         <button class="inline-flex justify-center whitespace-nowrap rounded-lg bg-cyan-700 px-3 py-2 text-sm font-medium text-white hover:bg-cyan-900 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 transition-colors">
           Add To Cart
         </button>
@@ -56,16 +54,63 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div x-data="modal()" x-show="isOpen" @click.away="closeModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg w-11/12 sm:w-3/4 lg:w-1/2">
+    <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    <img class="w-full h-auto" :src="selectedProduct.image" alt="Product Image">
+    <h1 class="text-2xl font-bold mt-4" x-text="selectedProduct.title"></h1>
+    <div class="flex items-center mt-2">
+      <span class="text-yellow-500" x-html="getStars(selectedProduct.rating)"></span>
+      <div class="ml-2" x-text="'Reviews: ' + selectedProduct.rating.count"></div>
+    </div>
+    <p class="mt-2" x-text="'$' + selectedProduct.price"></p>
+    <p class="mt-2" x-text="selectedProduct.description"></p>
+    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10" x-text="selectedProduct.category"></span>
+    <button @click="addToCart" class="mt-4 bg-cyan-700 hover:bg-cyan-900 w-full text-white font-bold py-2 px-4 rounded">
+      Add To Cart
+    </button>
+  </div>
+</div>
+
 <script>
   function productCard(product) {
     return {
       product,
-      handleClick() {
-        window.location.href = `/products/${this.product.id}`;
+      openModal() {
+        document.querySelector('[x-data="modal()"]').__x.$data.selectedProduct = this.product;
+        document.querySelector('[x-data="modal()"]').__x.$data.isOpen = true;
       },
       addToFavourites(event) {
         event.stopPropagation();
         alert('Added to favourites');
+      },
+      getStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStars = rating % 1 !== 0 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStars;
+        return `
+          ${'<span>&#9733;</span>'.repeat(fullStars)}
+          ${'<span>&#9734;</span>'.repeat(halfStars)}
+          ${'<span>&#9734;</span>'.repeat(emptyStars)}
+        `;
+      }
+    }
+  }
+
+  function modal() {
+    return {
+      isOpen: false,
+      selectedProduct: {},
+      closeModal() {
+        this.isOpen = false;
+      },
+      addToCart() {
+        alert('Product added to cart');
       },
       getStars(rating) {
         const fullStars = Math.floor(rating);
