@@ -1,8 +1,4 @@
-<div
-  x-data="productList()"
-  class="grid justify-center"
-  x-init="init()"
->
+<div x-data="productList()" class="grid justify-center">
   <!-- Loading State -->
   <template x-if="loading && !error">
     <div class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
@@ -32,7 +28,7 @@
     <div class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
       <template x-for="product in products" :key="product.id">
         <div
-          @click="navigateToProduct(product.id)"
+          @click="openModal(product)"
           class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-300 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
         >
           <img :src="product.image" alt="Product Image" class="object-contain h-48 mt-3">
@@ -67,12 +63,47 @@
       </template>
     </div>
   </template>
+
+  <!-- Product Detail Modal -->
+  <div x-show="selectedProduct" @click.outside="closeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="bg-white rounded-lg p-6 max-w-lg w-full relative">
+      <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="flex">
+        <!-- Product Image in Modal -->
+        <img :src="selectedProduct.image" alt="Product Image" class="w-48 h-48 object-cover rounded-lg">
+        <div class="ml-6">
+          <!-- Product Title in Modal -->
+          <h1 class="text-2xl font-bold" x-text="selectedProduct.title"></h1>
+          <div class="flex items-center mt-2">
+            <svg class="w-5 h-5 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+            </svg>
+            <span x-text="selectedProduct.rating.rate"></span>
+          </div>
+          <!-- Product Category in Modal -->
+          <div class="mt-2 text-gray-600">
+            <span class="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium" x-text="selectedProduct.category"></span>
+          </div>
+          <!-- Product Price in Modal -->
+          <div class="mt-4 text-lg font-bold" x-text="'$' + selectedProduct.price"></div>
+          <!-- Product Description in Modal -->
+          <p class="mt-2 text-gray-700" x-text="selectedProduct.description"></p>
+          <button @click="addToCart(selectedProduct.id)" class="mt-4 bg-cyan-700 text-white px-4 py-2 rounded-lg hover:bg-cyan-900">Add To Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   function productList() {
     return {
       products: [],
+      selectedProduct: null,
       loading: true,
       error: null,
       init() {
@@ -88,14 +119,19 @@
             this.loading = false;
           });
       },
-      navigateToProduct(id) {
-        window.location.href = `/products/${id}`;
+      openModal(product) {
+        this.selectedProduct = product;
       },
-      addToFavourites(id) {
-        alert(`Product ${id} added to favourites`);
+      closeModal() {
+        this.selectedProduct = null;
       },
-      addToCart(id) {
-        alert(`Product ${id} added to cart`);
+      addToCart(productId) {
+        // Handle adding product to cart
+        console.log('Add to cart', productId);
+      },
+      addToFavourites(productId) {
+        // Handle adding product to favourites
+        console.log('Add to favourites', productId);
       }
     }
   }
